@@ -1,11 +1,9 @@
-package main
+package coinmarketcap
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"time"
 )
 
 var (
@@ -102,59 +100,4 @@ func GetTickers() ([]Ticker, error) {
 
 	return tickers, err
 
-}
-
-func main() {
-
-	now := time.Now().UTC()
-
-	fmt.Println(now)
-
-	test, err2 := GetTickers()
-
-	fmt.Printf("%v", len(test))
-	fmt.Printf("%v", err2)
-
-	url := "https://api.coinmarketcap.com/v1/ticker/"
-
-	// Build the request
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		log.Fatal("NewRequest: ", err)
-		return
-	}
-
-	// For control over HTTP client headers,
-	// redirect policy, and other settings,
-	// create a Client
-	// A Client is an HTTP client
-	client := &http.Client{}
-
-	// Send the request via a client
-	// Do sends an HTTP request and
-	// returns an HTTP response
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal("Do: ", err)
-		return
-	}
-
-	// Callers should close resp.Body
-	// when done reading from it
-	// Defer the closing of the body
-	defer resp.Body.Close()
-
-	fmt.Println(resp.StatusCode)
-
-	fmt.Printf("%+v", resp.Body)
-
-	tickers := []Ticker{}
-
-	// Use json.Decode for reading streams of JSON data
-	if err := json.NewDecoder(resp.Body).Decode(&tickers); err != nil {
-		log.Println(err)
-	}
-
-	fmt.Printf("%+v", tickers[0])
-	fmt.Println("vim-go")
 }
