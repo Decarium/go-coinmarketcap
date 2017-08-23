@@ -37,11 +37,11 @@ type GlobalData struct {
 	ActiveMarkets                int     `json:"active_markets"`
 }
 
-func GetGlobal() (GlobalData, error) {
+func GetGlobal() (*GlobalData, error) {
 
 	globalURL := url + "global/"
 
-	req, err := http.NewRequest(http.MethodGet, tickerURL, nil)
+	req, err := http.NewRequest(http.MethodGet, globalURL, nil)
 	if err != nil {
 		log.Fatal("NewRequest: ", err)
 		return nil, err
@@ -57,7 +57,7 @@ func GetGlobal() (GlobalData, error) {
 
 	defer resp.Body.Close()
 
-	global := GlobalData{}
+	global := &GlobalData{}
 
 	err = json.NewDecoder(resp.Body).Decode(&global)
 	if err != nil {
